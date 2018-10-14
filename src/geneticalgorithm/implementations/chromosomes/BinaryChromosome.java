@@ -3,10 +3,8 @@ package geneticalgorithm.implementations.chromosomes;
 
 import geneticalgorithm.implementations.generators.BinaryGeneGenerator;
 import geneticalgorithm.implementations.genes.BinaryGene;
-import geneticalgorithm.implementations.genes.IntegerGene;
 import geneticalgorithm.interfaces.Chromosome;
 import geneticalgorithm.interfaces.GeneGenerator;
-import java.util.Random;
 
 public class BinaryChromosome extends IntegerChromosome
 {

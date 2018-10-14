@@ -7,7 +7,7 @@ import geneticalgorithm.implementations.mutators.RandomResetMutator;
 import geneticalgorithm.implementations.selectors.TournamentSelector;
 import geneticalgorithm.interfaces.*;
 
-public class GeneticAlgorithmConfiguration
+public class Configuration
 {
     private Population initialPopulation;
     private double crossoverRate;
@@ -25,7 +25,7 @@ public class GeneticAlgorithmConfiguration
     private static final double defaultCrossoverRate = 0.00;
     private static final double defaultMutationRate = 0.00;
     
-    public GeneticAlgorithmConfiguration(Population initialPopulation, double crossoverRate, 
+    public Configuration(Population initialPopulation, double crossoverRate, 
                                         double mutationRate, Selector selector, Crossover crossover, 
                                         Mutator mutator)
     {
@@ -37,15 +37,15 @@ public class GeneticAlgorithmConfiguration
         this.mutator = mutator;
     }
     
-    public GeneticAlgorithmConfiguration(GeneticAlgorithmConfiguration that)
+    public Configuration(Configuration that)
     {
         this(that.initialPopulation, that.crossoverRate, that.mutationRate, that.selector, 
              that.crossover, that.mutator);
     }
     
-    public static GeneticAlgorithmConfiguration  getDefaultConfiguration()
+    public static Configuration  getDefaultConfiguration()
     {
-        return new GeneticAlgorithmConfiguration(defaultPopulation, defaultCrossoverRate, 
+        return new Configuration(defaultPopulation, defaultCrossoverRate, 
                                                  defaultMutationRate, defaultSelector, 
                                                  defaultCrossover, defaultMutator);
     }

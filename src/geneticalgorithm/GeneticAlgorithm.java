@@ -3,42 +3,43 @@ package geneticalgorithm;
 import geneticalgorithm.models.*;
 import geneticalgorithm.exceptions.GeneticAlgorithmException;
 import geneticalgorithm.implementations.generators.BinaryChromosomeGenerator;
+import geneticalgorithm.implementations.mutators.*;
 import geneticalgorithm.interfaces.*;
 import java.time.LocalDateTime;
 
 public class GeneticAlgorithm
 {
-    private GeneticAlgorithmConfiguration configuration;
+    private Configuration configuration;
     
-    public GeneticAlgorithm(GeneticAlgorithmConfiguration config)
+    public GeneticAlgorithm(Configuration config)
     {
         this.configuration = config;
     }
     
     public GeneticAlgorithm()
     {
-        this(GeneticAlgorithmConfiguration.getDefaultConfiguration());
+        this.configuration = Configuration.getDefaultConfiguration();
     }
     
     public GeneticAlgorithm(Population population) 
     { 
-        this.configuration = GeneticAlgorithmConfiguration.getDefaultConfiguration();
-        this.configuration.setInitialPopulation(population);
+        this.configuration = Configuration.getDefaultConfiguration();
+        this.setInitialPopulation(population);
     }
     
     public GeneticAlgorithm(Selector selector, Crossover crossover, Mutator mutator)
     {
-        this.configuration = GeneticAlgorithmConfiguration.getDefaultConfiguration();
-        this.configuration.setSelector(selector);
-        this.configuration.setCrossover(crossover);
-        this.configuration.setMutator(mutator);
+        this.configuration = Configuration.getDefaultConfiguration();
+        this.setSelector(selector);
+        this.setCrossover(crossover);
+        this.setMutator(mutator);
     }
     
     public GeneticAlgorithm(double crossoverRate, double mutationRate)
     {
-        this.configuration = GeneticAlgorithmConfiguration.getDefaultConfiguration();
-        this.configuration.setCrossoverRate(crossoverRate);
-        this.configuration.setMutationRate(mutationRate);
+        this.configuration = Configuration.getDefaultConfiguration();
+        this.setCrossoverRate(crossoverRate);
+        this.setMutationRate(mutationRate);
     }
     
     public void setMaxNumOfGenerations(int maxNum)
@@ -218,6 +219,7 @@ public class GeneticAlgorithm
         ga.setInitialPopulation(Population.getRandomPopulation(50, new BinaryChromosomeGenerator(50)));
         ga.setMaxNumOfGenerations(1000);
         ga.setMaxFitnessScore(50);
+        ga.setMutator(new SwapMutator());
         
         try
         {
