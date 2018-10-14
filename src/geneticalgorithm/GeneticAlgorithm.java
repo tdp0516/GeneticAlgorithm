@@ -1,168 +1,147 @@
 package geneticalgorithm;
 
-import geneticalgorithm.implementations.mutators.RandomResetMutator;
-import geneticalgorithm.implementations.crossovers.UniformCrossover;
-import geneticalgorithm.implementations.selectors.TournamentSelector;
 import geneticalgorithm.models.*;
 import geneticalgorithm.exceptions.GeneticAlgorithmException;
 import geneticalgorithm.implementations.generators.BinaryChromosomeGenerator;
-import geneticalgorithm.implementations.generators.BinaryGeneGenerator;
 import geneticalgorithm.interfaces.*;
 import java.time.LocalDateTime;
 
 public class GeneticAlgorithm
 {
-    private Population initialPopulation;
-    private double crossoverRate;
-    private double mutationRate;
-    private Selector selector;
-    private Crossover crossover;
-    private Mutator mutator;
-    private Integer maxNumOfGenerations;
-    private Integer maxFitnessScore;
+    private GeneticAlgorithmConfiguration configuration;
     
-    private static final Population defaultPopulation = new Population();
-    private static final Selector defaultSelector = new TournamentSelector(5);
-    private static final Crossover defaultCrossover = new UniformCrossover();
-    private static final Mutator defaultMutator = new RandomResetMutator(new BinaryGeneGenerator());
-    private static final double defaultCrossoverRate = 0.00;
-    private static final double defaultMutationRate = 0.00;
-    
-    public GeneticAlgorithm(Population population, Selector selector, Crossover crossover, 
-                            Mutator mutator, double crossoverRate, double mutationRate)
+    public GeneticAlgorithm(GeneticAlgorithmConfiguration config)
     {
-        this.initialPopulation = population;
-        this.selector = selector;
-        this.crossover = crossover;
-        this.mutator = mutator;
-        this.crossoverRate = crossoverRate;
-        this.mutationRate = mutationRate;
+        this.configuration = config;
     }
     
     public GeneticAlgorithm()
     {
-        this(defaultPopulation, defaultSelector, defaultCrossover, defaultMutator, 
-            defaultCrossoverRate, defaultMutationRate);
+        this(GeneticAlgorithmConfiguration.getDefaultConfiguration());
     }
     
     public GeneticAlgorithm(Population population) 
     { 
-        this(population, defaultSelector, defaultCrossover, defaultMutator,
-             defaultCrossoverRate, defaultMutationRate);
+        this.configuration = GeneticAlgorithmConfiguration.getDefaultConfiguration();
+        this.configuration.setInitialPopulation(population);
     }
     
     public GeneticAlgorithm(Selector selector, Crossover crossover, Mutator mutator)
     {
-        this(defaultPopulation, selector, crossover, mutator, 
-             defaultCrossoverRate, defaultMutationRate);
+        this.configuration = GeneticAlgorithmConfiguration.getDefaultConfiguration();
+        this.configuration.setSelector(selector);
+        this.configuration.setCrossover(crossover);
+        this.configuration.setMutator(mutator);
     }
     
     public GeneticAlgorithm(double crossoverRate, double mutationRate)
     {
-        this(defaultPopulation, defaultSelector, defaultCrossover, defaultMutator,
-             crossoverRate, mutationRate);
+        this.configuration = GeneticAlgorithmConfiguration.getDefaultConfiguration();
+        this.configuration.setCrossoverRate(crossoverRate);
+        this.configuration.setMutationRate(mutationRate);
     }
     
     public void setMaxNumOfGenerations(int maxNum)
     {
-        this.maxNumOfGenerations = maxNum;
+        this.configuration.setMaxNumberOfGenerations(maxNum);
     }
     
     public void setMaxFitnessScore(int maxScore)
     {
-        this.maxFitnessScore = maxScore;
+        this.configuration.setMaxFitnessScore(maxScore);
     }
     
     public void setInitialPopulation(Population population)
     {
-        this.initialPopulation = population;
+        this.configuration.setInitialPopulation(population);
     }
     
     public void setCrossoverRate(double crossoverRate)
     {
-        this.crossoverRate = crossoverRate;
+        this.configuration.setCrossoverRate(crossoverRate);
     }
     
     public void setMutationRate(double mutationRate)
     {
-        this.mutationRate = mutationRate;
+        this.configuration.setMutationRate(mutationRate);
     }
     
     public void setSelector(Selector selector)
     {
-        this.selector = selector;
+        this.configuration.setSelector(selector);
     }
     
     public void setCrossover(Crossover crossover)
     {
-        this.crossover = crossover;
+        this.configuration.setCrossover(crossover);
     }
     
     public void setMutator(Mutator mutator)
     {
-        this.mutator = mutator;
+        this.configuration.setMutator(mutator);
     }
     
     public Population getInitialPopulation()
     {
-        return this.initialPopulation;
+        return this.configuration.getInitialPopulation();
     }
     
     public double getCrossoverRate()
     {
-        return this.crossoverRate;
+        return this.configuration.getCrossoverRate();
     }
     
     public double getMutationRate()
     {
-        return this.mutationRate;
+        return this.configuration.getMutationRate();
     }
     
     public Selector getSelector(Selector selector)
     {
-        return this.selector;
+        return this.configuration.getSelector();
     }
     
     public Crossover getCrossover(Crossover crossover)
     {
-        return this.crossover;
+        return this.configuration.getCrossover();
     }
     
     public Mutator getMutator(Mutator mutator)
     {
-        return this.mutator;
+        return this.configuration.getMutator();
     }
     
     public Integer getMaxNumOfGenerations()
     {
-        return this.maxNumOfGenerations;
+        return this.configuration.getMaxNumOfGenerations();
     }
     
     public Integer getMaxFitnessScore()
     {
-        return this.maxFitnessScore;
+        return this.configuration.getMaxFitnessScore();
     }
     
     private Chromosome select(Population population)
     {
-        return this.selector.select(population);
+        return this.configuration.getSelector().select(population);
     }
     
     private Chromosome crossover(Chromosome parent1, Chromosome parent2)
     {
-        return this.crossover.crossover(this.crossoverRate, parent1, parent2);
+        return this.configuration.getCrossover().crossover(this.getCrossoverRate(), 
+                                                           parent1, parent2);
     }
     
     private void mutate(Chromosome individual)
     {
-        this.mutator.mutate(this.mutationRate, individual);
+        this.configuration.getMutator().mutate(this.getMutationRate(), individual);
     }
     
     public GeneticAlgorithmResults evolve(double crossoverRate, double mutationRate)
             throws GeneticAlgorithmException
     {
-        this.crossoverRate = crossoverRate;
-        this.mutationRate = mutationRate;
+        this.setCrossoverRate(crossoverRate);
+        this.setMutationRate(mutationRate);
         
         return this.evolve();
     }
@@ -170,9 +149,9 @@ public class GeneticAlgorithm
     public GeneticAlgorithmResults evolve(Population population, double crossoverRate, 
                                           double mutationRate) throws GeneticAlgorithmException
     {
-        this.initialPopulation = population;
-        this.crossoverRate = crossoverRate;
-        this.mutationRate = mutationRate;
+        this.setInitialPopulation(population);
+        this.setCrossoverRate(crossoverRate);
+        this.setMutationRate(mutationRate);
         
         return this.evolve();
     }
@@ -180,21 +159,21 @@ public class GeneticAlgorithm
     public GeneticAlgorithmResults evolve() throws GeneticAlgorithmException
     {
         // Check for potential initialization errors
-        if(this.initialPopulation == null || this.initialPopulation.size() == 0)
+        if(this.getInitialPopulation() == null || this.getInitialPopulation().size() == 0)
         {
             throw new GeneticAlgorithmException("Initial population has not been set");
         }
-        else if(this.maxFitnessScore == null && this.maxNumOfGenerations == null)
+        else if(this.getMaxFitnessScore() == null && this.getMaxNumOfGenerations() == null)
         {
             throw new GeneticAlgorithmException("No exit condition has been set");
         }
-        else if(this.crossoverRate == 0.00)
+        else if(this.getCrossoverRate() == 0.00)
         {
             throw new GeneticAlgorithmException("Crossover rate is set to 0.00");
         }
         
         GeneticAlgorithmResults results = new GeneticAlgorithmResults(LocalDateTime.now());
-        Population current = new Population(this.initialPopulation), 
+        Population current = new Population(this.getInitialPopulation()), 
                    nextGeneration = new Population();
 
         while(true)
@@ -218,13 +197,13 @@ public class GeneticAlgorithm
             nextGeneration.clear();
             
             // Break out at either exit condition
-            if(this.maxNumOfGenerations != null && 
-               results.getNumberOfGenerations() == this.maxNumOfGenerations)
+            if(this.getMaxNumOfGenerations() != null && 
+               results.getNumberOfGenerations() == this.getMaxNumOfGenerations())
             {
                 break;
             }
-            else if(this.maxFitnessScore != null &&
-                    results.getHighestFitnessScore() >= this.maxFitnessScore)
+            else if(this.getMaxFitnessScore() != null &&
+                    results.getHighestFitnessScore() >= this.getMaxFitnessScore())
             {
                 break;
             }
@@ -236,9 +215,9 @@ public class GeneticAlgorithm
     public static void main(String[] args)
     {
         GeneticAlgorithm ga = new GeneticAlgorithm(.75, 0.05);
-        ga.setInitialPopulation(Population.getRandomPopulation(50, new BinaryChromosomeGenerator(20)));
+        ga.setInitialPopulation(Population.getRandomPopulation(50, new BinaryChromosomeGenerator(50)));
         ga.setMaxNumOfGenerations(1000);
-        ga.setMaxFitnessScore(20);
+        ga.setMaxFitnessScore(50);
         
         try
         {
