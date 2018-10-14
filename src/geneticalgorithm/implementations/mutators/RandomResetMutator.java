@@ -1,5 +1,5 @@
 
-package geneticalgorithm.implementations;
+package geneticalgorithm.implementations.mutators;
 
 import geneticalgorithm.interfaces.Mutator;
 import java.util.Random;

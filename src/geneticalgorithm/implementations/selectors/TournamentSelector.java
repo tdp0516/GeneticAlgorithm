@@ -1,5 +1,5 @@
 
-package geneticalgorithm.implementations;
+package geneticalgorithm.implementations.selectors;
 
 import geneticalgorithm.models.Population;
 import geneticalgorithm.interfaces.Selector;

@@ -2,10 +2,8 @@
 package geneticalgorithm.models;
 
 import geneticalgorithm.interfaces.Chromosome;
-import geneticalgorithm.models.Population;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class GeneticAlgorithmResults
 {
@@ -68,8 +66,51 @@ public class GeneticAlgorithmResults
         return best;
     }
     
+    public Chromosome getWorstIndividual()
+    {
+        Chromosome worst = this.populations.get(0).getBestIndividual();
+        int lowestScore = this.populations.get(0).getHighestFitnessScore();
+        
+        for(int i = 1; i < this.populations.size(); i++)
+        {
+            int currentLowest = this.populations.get(i).getHighestFitnessScore();
+            
+            if(currentLowest < lowestScore)
+            {
+                worst = this.populations.get(i).getBestIndividual();
+                lowestScore = currentLowest;
+            }
+        }
+        
+        return worst;
+    }
+    
     public int getHighestFitnessScore()
     {
         return this.getBestIndividual().calcFitnessScore();
+    }
+    
+    public int getLowestFitnessScore()
+    {
+        return this.getWorstIndividual().calcFitnessScore();
+    }
+    
+    public int getAverageFitnessScore()
+    {
+        int sum = 0;
+        int count = 0;
+        
+        for(int i = 0; i < this.populations.size(); i++)
+        {
+            Population current = this.populations.get(i);
+            
+            for(int j = 0; j < current.size(); j++)
+            {
+                sum += current.get(j).calcFitnessScore();
+                count++;
+            }
+        }
+        
+        return sum / count;
     }
 }

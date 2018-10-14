@@ -1,9 +1,12 @@
 package geneticalgorithm;
 
-import geneticalgorithm.mystuff.*;
+import geneticalgorithm.implementations.mutators.RandomResetMutator;
+import geneticalgorithm.implementations.crossovers.UniformCrossover;
+import geneticalgorithm.implementations.selectors.TournamentSelector;
 import geneticalgorithm.models.*;
 import geneticalgorithm.exceptions.GeneticAlgorithmException;
-import geneticalgorithm.implementations.*;
+import geneticalgorithm.implementations.generators.BinaryChromosomeGenerator;
+import geneticalgorithm.implementations.generators.BinaryGeneGenerator;
 import geneticalgorithm.interfaces.*;
 import java.time.LocalDateTime;
 
@@ -21,7 +24,7 @@ public class GeneticAlgorithm
     private static final Population defaultPopulation = new Population();
     private static final Selector defaultSelector = new TournamentSelector(5);
     private static final Crossover defaultCrossover = new UniformCrossover();
-    private static final Mutator defaultMutator = new RandomResetMutator(new MyGeneGenerator());
+    private static final Mutator defaultMutator = new RandomResetMutator(new BinaryGeneGenerator());
     private static final double defaultCrossoverRate = 0.00;
     private static final double defaultMutationRate = 0.00;
     
@@ -233,7 +236,7 @@ public class GeneticAlgorithm
     public static void main(String[] args)
     {
         GeneticAlgorithm ga = new GeneticAlgorithm(.75, 0.05);
-        ga.setInitialPopulation(Population.getRandomPopulation(50, new MyChromosomeGenerator()));
+        ga.setInitialPopulation(Population.getRandomPopulation(50, new BinaryChromosomeGenerator(20)));
         ga.setMaxNumOfGenerations(1000);
         ga.setMaxFitnessScore(20);
         

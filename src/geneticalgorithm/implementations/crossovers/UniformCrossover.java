@@ -1,5 +1,5 @@
 
-package geneticalgorithm.implementations;
+package geneticalgorithm.implementations.crossovers;
 
 import geneticalgorithm.interfaces.*;
 import java.util.Random;
