@@ -235,10 +235,14 @@ public class GeneticAlgorithm
         GeneticAlgorithm ga = new GeneticAlgorithm(.75, 0.05);
         ga.setInitialPopulation(Population.getRandomPopulation(50, new MyChromosomeGenerator()));
         ga.setMaxNumOfGenerations(1000);
+        ga.setMaxFitnessScore(20);
         
         try
         {
-            ga.evolve();
+            GeneticAlgorithmResults results = ga.evolve();
+            
+            System.out.println(results.getNumberOfGenerations());
+            System.out.println(results.getBestIndividual());
         }
         catch(GeneticAlgorithmException gaex)
         {

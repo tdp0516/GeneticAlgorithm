@@ -83,4 +83,9 @@ public class MyChromosome implements Chromosome
     {
         this.genes.remove(i);
     }
+    
+    public String toString()
+    {
+        return this.genes.toString();
+    }
 }

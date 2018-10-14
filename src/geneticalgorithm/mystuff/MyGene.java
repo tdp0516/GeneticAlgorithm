@@ -21,4 +21,9 @@ public class MyGene implements Gene
     {
         this.num = num;
     }
+    
+    public String toString()
+    {
+        return Integer.toString(num);
+    }
 }
